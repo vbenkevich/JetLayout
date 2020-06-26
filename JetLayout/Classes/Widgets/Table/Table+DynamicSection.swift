@@ -109,7 +109,7 @@ extension Table {
             guard let view = view else { return .zero }
             
             let targetSize = CGSize(width: parentView.bounds.width,
-                                    height: CGFloat.max)
+                                    height: CGFloat.greatestFiniteMagnitude)
             
             return view.systemLayoutSizeFitting(targetSize,
                                                 withHorizontalFittingPriority: .required,

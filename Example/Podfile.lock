@@ -1,9 +1,9 @@
 PODS:
-  - FBSnapshotTestCase (2.1.4):
-    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
-  - FBSnapshotTestCase/Core (2.1.4)
-  - FBSnapshotTestCase/SwiftSupport (2.1.4):
-    - FBSnapshotTestCase/Core
+  - iOSSnapshotTestCase (6.2.0):
+    - iOSSnapshotTestCase/SwiftSupport (= 6.2.0)
+  - iOSSnapshotTestCase/Core (6.2.0)
+  - iOSSnapshotTestCase/SwiftSupport (6.2.0):
+    - iOSSnapshotTestCase/Core
   - JetLayout (0.1.0):
     - RxCocoa (~> 5.1.1)
   - RxCocoa (5.1.1):
@@ -14,12 +14,12 @@ PODS:
   - RxSwift (5.1.1)
 
 DEPENDENCIES:
-  - FBSnapshotTestCase (~> 2.1.4)
+  - iOSSnapshotTestCase
   - JetLayout (from `../`)
 
 SPEC REPOS:
   trunk:
-    - FBSnapshotTestCase
+    - iOSSnapshotTestCase
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -29,12 +29,12 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  JetLayout: 36cc26a3670de0bac061b138fbafb0736335fdcc
+  iOSSnapshotTestCase: 9ab44cb5aa62b84d31847f40680112e15ec579a6
+  JetLayout: 9130ba395604d9b4cef9b6288b0c6c715ad8228a
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
 
-PODFILE CHECKSUM: bf04c4dae2306c3c248b4a4fa75201e9d39104e2
+PODFILE CHECKSUM: 17b45b64d1de4e5aa211126f21a6e6358b403bf9
 
 COCOAPODS: 1.9.1

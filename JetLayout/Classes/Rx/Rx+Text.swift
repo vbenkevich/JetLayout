@@ -165,3 +165,22 @@ public extension Widget where TView: UITextField {
             .bind(fromView, to: storage)
     }
 }
+
+private extension Reactive where Base: UITextField {
+    
+    var textChanged: ControlProperty<String> {
+        return base.rx.controlProperty(
+            editingEvents: [.editingChanged],
+            getter: { [weak base] _    in base?.text ?? "" },
+            setter: { [weak base] f, v in base?.text = v }
+        )
+    }
+    
+    var editingDidEnd: ControlProperty<String> {
+        return base.rx.controlProperty(
+            editingEvents: [.editingDidEnd],
+            getter: { [weak base] _    in base?.text ?? "" },
+            setter: { [weak base] f, v in base?.text = v }
+        )
+    }
+}

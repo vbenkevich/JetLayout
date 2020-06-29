@@ -10,6 +10,20 @@ Layout engine is based on Autolayout, so JetLayout's widgets could be easily int
 RxSwift is used to wiring UI and data.
 Since all layouts has written in code it possible to use plugins like R.swift to provide strong typed access to assets.
 
+## Requirements
+
+iOS 11
+Swift 5
+
+## Installation
+
+JetLayout is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'JetLayout'
+```
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -120,7 +134,7 @@ class ItemCell: ViewBasedTableCell<String> {
 
 ```
 
-Wiring toogether and attaching laout to UIViewController:
+Wiring toogether and attaching layout to UIViewController:
 ```swift
 
 @Observed
@@ -136,20 +150,6 @@ override func viewDidLoad() {
         ItemsTable(items: self.$items)
     }
 }
-```
-
-## Requirements
-
-iOS 11
-swift 5
-
-## Installation
-
-JetLayout is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'JetLayout'
 ```
 
 ## Author

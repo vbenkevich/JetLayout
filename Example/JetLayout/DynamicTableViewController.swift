@@ -37,43 +37,11 @@ class DynamicTableViewController: UIViewController {
     
     var body: View {
         VStack(spacing: 24) {
-            ZStack {
-                AddItemView { [weak self] in
-                    self?.items.append($0)
-                }
-            }
-            .hugging(.defaultLow, axis: .vertical)
-            .padding(16)
-            .preserveParentPadding()
+            AddItemView { [weak self] in self?.items.append($0) }
             
-            Table {
-                // Cells registration
-                ItemCell.register()
-                
-                // Static section at top
-                TSection {
-                    Image(#imageLiteral(resourceName: "Logo"))
-                        .alignment(.fill())
-                        .size(height: 80)
-                        .contentMode(.scaleAspectFit)
-                }
-                
-                // Dynamic section
-                TSection(source: self.$items)
-            }
-            .preserveParentPadding()
+            ItemsTable(items: self.$items)
         }
         .background(.white)
-    }
-    
-    
-    class ItemCell: ViewBasedTableCell<String> {
-        
-        override var view: View {
-            HStack {
-                Text(self.$model)
-            }.preserveParentPadding()
-        }
     }
 }
 
@@ -95,5 +63,41 @@ struct AddItemView: View {
                     self.itemName = ""
                 }
         }
+        .padding(16)
+        .preserveParentPadding()
+    }
+}
+
+struct ItemsTable: View {
+    
+    let items: Observed<[String]>
+    
+    var body: Layout {
+        Table {
+            // Cells registration
+            ItemCell.register()
+            
+            // Static section at top
+            TSection {
+                Image(#imageLiteral(resourceName: "Logo"))
+                    .alignment(.fill())
+                    .size(height: 80)
+                    .contentMode(.scaleAspectFit)
+            }
+            
+            // Dynamic section
+            TSection(source: self.items)
+        }
+        .preserveParentPadding()
+    }
+}
+
+
+class ItemCell: ViewBasedTableCell<String> {
+    
+    override var view: View {
+        HStack {
+            Text(self.$model)
+        }.preserveParentPadding()
     }
 }

@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'JetLayout_Example' do
+  pod 'JetLayout', :path => '../'
+
+  target 'JetLayout_Tests' do
+    inherit! :search_paths
+
+    pod 'iOSSnapshotTestCase'
+  end
+end

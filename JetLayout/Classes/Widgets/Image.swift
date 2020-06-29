@@ -24,13 +24,11 @@
 
 import UIKit
 
-open class Spacer: Widget<UIView> {
+open class Image: Widget<UIImageView> {
     
-    public init() {
-        super.init(UIView())
-        view.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
-        view.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)
-        view.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        view.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+    public init(_ image: UIImage?) {
+        super.init(UIImageView())
+        view.contentMode = .center
+        view.image = image
     }
 }

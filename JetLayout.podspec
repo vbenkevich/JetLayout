@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'JetLayout'
-  s.version          = '0.1.2'
-  s.summary          = 'A short description of JetLayout.'
+  s.version          = '0.2.0'
+  s.summary          = 'JetLayout is a swift based layout system.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,10 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+JetLayout is a swift based layout system. It has a syntax like SwiftUI, but JetLayout could be used with iOS 11.
+Layout engine is based on Autolayout, so JetLayout's widgets could be easily integrated into an existing application.
+RxSwift is used to wiring UI and data.
+Since all layouts has written in code it possible to use plugins like R.swift to provide strong typed access to assets.
                        DESC
 
   s.homepage         = 'https://github.com/vbenkevich/JetLayout'

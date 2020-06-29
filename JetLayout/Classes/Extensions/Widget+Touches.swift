@@ -26,7 +26,7 @@ import Foundation
 import UIKit
 import RxCocoa
 
-extension Widget {
+public extension Widget {
     
     func tap(exclude: [UIView] = [], block: @escaping (TView, UITapGestureRecognizer) -> Void) -> Self {
         let gesture = Gesture()

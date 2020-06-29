@@ -24,7 +24,7 @@
 
 import UIKit
 
-class Spacer: Widget<UIView> {
+open class Spacer: Widget<UIView> {
     
     init() {
         super.init(UIView())

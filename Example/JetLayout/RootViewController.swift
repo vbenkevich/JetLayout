@@ -10,7 +10,7 @@ class RootController: UITableViewController {
         _ = Table(tableView) {
             TSection(header: nil, footer: nil) {
                 
-                Text("Bindings sample")
+                Text("Bindings and layout sample")
                     .alignment(.fill(toPadding: true))
                     .cell()
                     .accessory(.disclosureIndicator)
@@ -24,16 +24,7 @@ class RootController: UITableViewController {
                     .selectionColor(UIColor.blue.withAlphaComponent(0.1))
                     .accessory(.disclosureIndicator)
                     .didSelect { [weak self] in
-                        
-                    }
-                
-                Text("Layout sample")
-                    .alignment(.fill(toPadding: true))
-                    .cell()
-                    .selectionColor(UIColor.green.withAlphaComponent(0.1))
-                    .accessory(.disclosureIndicator)
-                    .didSelect { [weak self] in
-                    
+                        self?.navigationController?.pushViewController(DynamicTableViewController(), animated: true)
                     }
             }
         }

@@ -44,7 +44,7 @@ class BindingsViewController: UIViewController {
             // Widget can be created from any UIView
             Widget(UIActivityIndicatorView())
                 .alignment(.center())
-                // Sample of custom UIView setup before adding to layout
+                // setup before adding to layout
                 .setup(block: { view in
                     view.hidesWhenStopped = true
                     view.color = .red
@@ -61,23 +61,19 @@ class BindingsViewController: UIViewController {
             VStack(spacing: 8) {
                 Image(#imageLiteral(resourceName: "Logo"))
                 
-                Empty(height: 8)
-                
                 Text("Email")
+                    .addMargin(top: 8)
                 Field(viewModel.$email)
                     .contentType(.emailAddress)
                     .placeholder("email@example.com")
                     .disabled(source: viewModel.$showActivity)
 
-                Empty(height: 8)
-                
                 Text("Password")
+                    .addMargin(top: 8)
                 Field(viewModel.$password)
                     .isSecureTextEntry(true)
                     .disabled(source: viewModel.$showActivity)
-                    .placeholder("your password")
-                
-                Empty(height: 8)
+                    .placeholder("strong password")
                 
                 HStack(spacing: 8) {
                     Text("I accept terms and conditions: ")
@@ -85,8 +81,7 @@ class BindingsViewController: UIViewController {
                     
                     Switch(viewModel.$termsAccepted)
                 }
-                
-                Empty(height: 24)
+                .addMargin(top: 8, bottom: 24)
                 
                 Button(type: .system, title: "Sign In")
                     .corner(radius: 8)

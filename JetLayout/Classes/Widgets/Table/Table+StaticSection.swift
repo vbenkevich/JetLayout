@@ -38,24 +38,28 @@ public extension View {
 
 public extension Table.TableCellConfigurationView {
         
-    mutating func accessory(_ type: UITableViewCell.AccessoryType) -> Table.TableCellConfigurationView {
-        self.accessoryType = type
-        return self
+    func accessory(_ type: UITableViewCell.AccessoryType) -> Table.TableCellConfigurationView {
+        var copy = self
+        copy.accessoryType = type
+        return copy
     }
         
-    mutating func selectionColor(_ color: UIColor) -> Table.TableCellConfigurationView {
-        self.selectionColor = color
-        return self
+    func selectionColor(_ color: UIColor) -> Table.TableCellConfigurationView {
+        var copy = self
+        copy.selectionColor = color
+        return copy
     }
     
-    mutating func canSelect(_ action: @escaping () -> Bool) -> Table.TableCellConfigurationView {
-        self.canSelectAction = action
-        return self
+    func canSelect(_ action: @escaping () -> Bool) -> Table.TableCellConfigurationView {
+        var copy = self
+        copy.canSelectAction = action
+        return copy
     }
     
-    mutating func didSelect(_ action: @escaping () -> Void) -> Table.TableCellConfigurationView {
-        self.didSelectAction = action
-        return self
+    func didSelect(_ action: @escaping () -> Void) -> Table.TableCellConfigurationView {
+        var copy = self
+        copy.didSelectAction = action
+        return copy
     }
 }
 
@@ -133,7 +137,7 @@ extension Table {
         init(_ view: View) {
             super.init(style: .default, reuseIdentifier: nil)
             contentView.preservesSuperviewLayoutMargins = true
-            view.embed(in: contentView, alignment: .fill(toPadding: false))
+            view.embed(in: contentView, alignment: view.body.alignment)
         }
         
         var canSelectAction: (() -> Bool)?
@@ -153,11 +157,20 @@ extension Table {
         }
         
         override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-            contentView.backgroundColor = highlighted ? selectionColor : UIColor.clear
+            guard let color = selectionColor else {
+                super.setHighlighted(highlighted, animated: animated)
+                return
+            }
+            backgroundColor = highlighted ? color : UIColor.clear
         }
         
-        override func setSelected(_ selecteds: Bool, animated: Bool) {
-            contentView.backgroundColor = selecteds ? selectionColor : UIColor.clear
+        override func setSelected(_ selected: Bool, animated: Bool) {
+            guard let color = selectionColor else {
+                super.setSelected(selected, animated: animated)
+                return
+            }
+            
+            backgroundColor = selected ? color : UIColor.clear
         }
     }
 }

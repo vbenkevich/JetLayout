@@ -26,7 +26,7 @@ import UIKit
 
 open class Spacer: Widget<UIView> {
     
-    init() {
+    public init() {
         super.init(UIView())
         view.setContentHuggingPriority(.fittingSizeLevel, for: .horizontal)
         view.setContentHuggingPriority(.fittingSizeLevel, for: .vertical)

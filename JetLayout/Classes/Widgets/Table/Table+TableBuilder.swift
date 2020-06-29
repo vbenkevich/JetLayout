@@ -47,6 +47,8 @@ public extension Table {
     }
 }
 
+#warning("TODO dynamic sections count")
+#warning("TODO tableHeaderView")
 @_functionBuilder
 public class TableBuilder {
     

@@ -38,7 +38,7 @@ public extension GenericCell where Self: UITableViewCell {
     }
 }
 
-public class ViewBasedTableCell<Model>: UITableViewCell, GenericCell {
+open class ViewBasedTableCell<Model>: UITableViewCell, GenericCell {
     
     @Observed
     public var model: Model?
@@ -47,12 +47,12 @@ public class ViewBasedTableCell<Model>: UITableViewCell, GenericCell {
         fatalError("Abstract")
     }
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         super.init(coder: coder)
         setupLayout()
     }

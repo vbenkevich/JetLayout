@@ -43,7 +43,7 @@ open class Table: Widget<UITableView> {
     }
 }
 
-extension Widget where TView: UITableView {
+public extension Widget where TView: UITableView {
     
     func table(dataSource: UITableViewDataSource?) -> Self {
         view.dataSource = dataSource

@@ -173,7 +173,7 @@ public extension Widget where TView: UIView {
     }
 }
 
-extension View {
+public extension View {
     
     func root(of controller: UIViewController) {
         let container: UIView
@@ -186,7 +186,7 @@ extension View {
     }
 }
 
-extension View {
+public extension View {
     
     func addMargin(_ padding: CGFloat) -> View {
         addMargin(left: padding, top: padding, right: padding, bottom: padding)

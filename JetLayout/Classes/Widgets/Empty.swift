@@ -24,9 +24,9 @@
 
 import UIKit
 
-class Empty: Widget<UIView> {
+public class Empty: Widget<UIView> {
     
-    init(color: UIColor? = nil, width: CGFloat? = nil, height: CGFloat? = nil) {
+    public init(color: UIColor? = nil, width: CGFloat? = nil, height: CGFloat? = nil) {
         let view = UIView()
         
         if let color = color {
@@ -38,7 +38,7 @@ class Empty: Widget<UIView> {
         _ = self.size(width: width, height: height)
     }
     
-    init(color: UIColor? = nil, size: CGSize) {
+    public init(color: UIColor? = nil, size: CGSize) {
         let view = UIView()
         
         if let color = color {

@@ -154,7 +154,7 @@ public extension Widget {
 
 // Workaround
 // it's impossible to get the Self type in Widget<TView> extension, only a TView type is available
-extension View {
+public extension View {
     
     func bind<Observable: ObservableType, Observer: ObserverType, TView: UIView>(widget observable: (Self) -> Observable, to observer: Observer) -> Self
         where Observable.Element == Observer.Element, Self: Widget<TView>

@@ -94,7 +94,7 @@ public extension ObservableType {
     }
 }
 
-extension PrimitiveSequenceType where Self.Trait == RxSwift.SingleTrait {
+public extension PrimitiveSequenceType where Self.Trait == RxSwift.SingleTrait {
     
     func store(in observerd: Observed<Element?>) -> Single<Element> {
         return self.do(onSuccess: { element in observerd.wrappedValue = element })
@@ -109,7 +109,7 @@ extension PrimitiveSequenceType where Self.Trait == RxSwift.SingleTrait {
     }
 }
 
-extension SharedSequence {
+public extension SharedSequence {
     
     func store(in observerd: Observed<Element?>) -> Self {
         self.do(onNext: { element in observerd.wrappedValue = element })

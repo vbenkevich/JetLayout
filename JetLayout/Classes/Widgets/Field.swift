@@ -127,6 +127,11 @@ public extension Widget where TView: UITextField {
         view.autocorrectionType = autocorrection
         return self
     }
+    
+    func isSecureTextEntry(_ isSecureTextEntry: Bool) -> Self {
+        view.isSecureTextEntry = isSecureTextEntry
+        return self
+    }
 }
 
 public extension Field {

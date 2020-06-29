@@ -1,4 +1,3 @@
-import UIKit
 import JetLayout
 
 class RootController: UITableViewController {
@@ -15,8 +14,8 @@ class RootController: UITableViewController {
                     .alignment(.fill(toPadding: true))
                     .cell()
                     .accessory(.disclosureIndicator)
-                    .didSelect {
-                        
+                    .didSelect { [weak self] in
+                        self?.navigationController?.pushViewController(BindingsViewController(), animated: true)
                     }
                 
                 Text("Table with dynamic cells")
@@ -24,7 +23,7 @@ class RootController: UITableViewController {
                     .cell()
                     .selectionColor(UIColor.blue.withAlphaComponent(0.1))
                     .accessory(.disclosureIndicator)
-                    .didSelect {
+                    .didSelect { [weak self] in
                         
                     }
                 
@@ -33,7 +32,7 @@ class RootController: UITableViewController {
                     .cell()
                     .selectionColor(UIColor.green.withAlphaComponent(0.1))
                     .accessory(.disclosureIndicator)
-                    .didSelect {
+                    .didSelect { [weak self] in
                     
                     }
             }

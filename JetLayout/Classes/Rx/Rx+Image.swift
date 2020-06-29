@@ -22,59 +22,30 @@
 //  SOFTWARE.
 //
 
-import Foundation
 import UIKit
+import RxSwift
+import RxCocoa
 
-public extension Widget {
+public extension Image {
     
-    func isHidden(_ hidden: Bool) -> Self {
-        view.isHidden = hidden
-        return self
+    convenience init<Source: ObservableType>(_ source: Source) where Source.Element == UIImage? {
+        self.init(nil)
+        _ = bind(source, to: \.image)
     }
     
-    func isVisible(_ visible: Bool) -> Self {
-        view.isHidden = !visible
-        return self
+    convenience init<Source: ObservableType>(_ source: Source) where Source.Element == UIImage {
+        self.init(nil)
+        _ = bind(source.optional(), to: \.image)
     }
-    
-    func background(_ color: UIColor) -> Self {
-        view.backgroundColor = color
-        return self
-    }
-    
-    func corner(radius: CGFloat?) -> Self {
-        view.layer.cornerRadius = radius ?? 0
-        view.clipsToBounds = radius != nil
-        return self
-    }
-    
-    func corner(mask: CACornerMask) -> Self {
-        view.layer.maskedCorners = mask
-        return self
-    }
+}
 
-    func border(color: UIColor?) -> Self {
-        view.layer.borderColor = color?.cgColor
-        return self
+public extension Widget where TView: UIImageView {
+    
+    func image<T: ObservableType>(_ source: T) -> Self where T.Element == UIImage? {
+        bind(source) { view, image in view.image = image }
     }
     
-    func border(width: CGFloat) -> Self {
-        view.layer.borderWidth = width
-        return self
-    }
-    
-    func focus() -> Self {
-        view.becomeFirstResponder()
-        return self
-    }
-    
-    func tint(_ color: UIColor) -> Self {
-        view.tintColor = color
-        return self
-    }
-    
-    func contentMode(_ contentMode: UIView.ContentMode) -> Self {
-        view.contentMode = contentMode
-        return self
+    func tint<T: ObservableType>(_ source: T) -> Self where T.Element == UIColor? {
+        bind(source) { view, color in view.tintColor = color }
     }
 }

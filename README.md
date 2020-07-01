@@ -114,13 +114,14 @@ class ItemCell: ViewBasedTableCell<String> {
     override var view: View {
         HStack {
             Text(self.$model)
-        }.preserveParentPadding()
+        }
+        .preserveParentPadding()
     }
 }
 
 ```
 
-Wiring toogether and attaching laout to UIViewController:
+Wiring previuos views toogether and inserting layout to UIViewController:
 ```swift
 
 @Observed
@@ -135,7 +136,33 @@ override func viewDidLoad() {
         
         ItemsTable(items: self.$items)
     }
+    .root(of: self)
 }
+```
+
+Support autolayout features like margins and preserving parent/safearea margins. View could be alligned both superview's bounds and superview's margins:
+```swift
+
+ZStack {
+    // View 20x20 in the top-right corner. distance to top = 10, distance to rignt = 0
+    Empty(color: .green, size: CGSize(width: 20, height: 20))
+        .alignment(Alignment.top().right())
+        .align(topPadding: true, rightPadding: false)
+    
+    // this stack alligned to superview's bounds but preserve superview paddings
+    HStack {
+        Empty(color: .red)
+            .align(toPadding: false)
+            .align(leftPadding: true)
+        
+        Empty(color: .blue)
+            .align(bottomPadding: false)
+    }
+    .distribution(.fillEqually)
+    .preserveParentPadding()
+}
+.preserveParentPadding() // keep safe area and viewController margins
+.padding(10) //adding self padding (at least 10) result padding for root view in VC will: (10, 20, 10 ,20)
 ```
 
 ## Requirements

@@ -85,12 +85,12 @@ class BindingsViewController: UIViewController {
                 
                 Button(type: .system, title: "Sign In")
                     .corner(radius: 8)
-                    .size(height: 32)
+                    .size(height: 32, priority: .defaultHigh)
                     .font(.boldSystemFont(ofSize: 16))
-                    .align(left: 16, right: 16)
-                    .visible(bind: viewModel.$termsAccepted)
                     .enabled(source: viewModel.canLogin)
                     .tap { [unowned viewModel] in viewModel.performLogin() }
+                    .animation(expanded: viewModel.$termsAccepted, axis: .vertical)
+                    .addMargin(horizontal: 16)
             }
             .alignment(Alignment.top(48).left(48).right(48))
             
@@ -106,7 +106,7 @@ class BindingsViewController: UIViewController {
         var password: String?
         
         @Observed
-        var termsAccepted = false
+        var termsAccepted = true
         
         @Observed
         var showActivity = false

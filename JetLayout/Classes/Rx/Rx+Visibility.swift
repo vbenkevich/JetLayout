@@ -35,47 +35,40 @@ public extension Widget {
     func visible<Source: ObservableType>(bind source: Source) -> Self where Source.Element == Bool {
         bind(source.invert(), to: \.isHidden)
     }
+}
+
+public extension View {
     
-    func hidden<Source: ObservableType>(animated source: Source) -> Self where Source.Element == Bool {
-        visible(animated: source.invert())
+    func animation<Source: ObservableType>(expanded: Source, axis: Stack.Axis) -> View where Source.Element == Bool {
+        let container = CollapsibleContainerView()
+        container.axis = axis
+        container.heightConstraint = container.heightAnchor.constraint(equalToConstant: 1)
+        container.widthConstraint = container.widthAnchor.constraint(equalToConstant: 1)
+        
+        return ZStack(container) {
+            self
+        }.bind(expanded) { view, visible in
+            (view as? CollapsibleContainerView)?.animate(visible: visible, for: 0.250)
+        }
     }
     
-    func visible<Source: ObservableType>(animated source: Source) -> Self where Source.Element == Bool {
-        bind(source) { view, visible in
-            view.getVisibilityAnimationProvider()
-                .animate(view: view, visible: visible, for: 0.250)
-        }
+    func animation<Source: ObservableType>(collapsed: Source, axis: Stack.Axis) -> View where Source.Element == Bool {
+        return animation(expanded: collapsed.invert(), axis: axis)
     }
 }
 
-protocol VisibilityAnimationProvider {
-    
-    func animate(view: UIView, visible: Bool, for duration: TimeInterval)
-}
+private class CollapsibleContainerView: UIView {
 
-private extension UIView {
+    var axis: Stack.Axis!
+    var heightConstraint: NSLayoutConstraint!
+    var widthConstraint: NSLayoutConstraint!
     
-    func getVisibilityAnimationProvider() -> VisibilityAnimationProvider {
-        if let provider = superview as? VisibilityAnimationProvider {
-            return provider
-        } else {
-            return DefaultVisibilityAnimationProvider()
-        }
-    }
-}
- 
-private struct DefaultVisibilityAnimationProvider: VisibilityAnimationProvider {
-    
-    func animate(view: UIView, visible: Bool, for duration: TimeInterval) {
-        view.alpha = view.isHidden ? 0.01 : 1
-        view.isHidden = false
-        view.window?.layoutIfNeeded()
+    func animate(visible: Bool, for duration: TimeInterval) {
+        heightConstraint.isActive = axis == .vertical && !visible
+        widthConstraint.isActive = axis == .horizontal && !visible
         
         UIView.animate(withDuration: duration, animations: {
-            view.alpha = visible ? 1 : 0
-            view.window?.layoutIfNeeded()
-        }, completion: { _ in
-            view.isHidden = !visible
+            self.superview?.layoutIfNeeded()
         })
     }
 }

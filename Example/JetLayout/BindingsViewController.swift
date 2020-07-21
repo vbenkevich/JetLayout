@@ -67,7 +67,7 @@ class BindingsViewController: UIViewController {
                     .contentType(.emailAddress)
                     .placeholder("email@example.com")
                     .disabled(source: viewModel.$showActivity)
-
+                
                 Text("Password")
                     .addMargin(top: 8)
                 Field(viewModel.$password)
@@ -82,15 +82,15 @@ class BindingsViewController: UIViewController {
                     Switch(viewModel.$termsAccepted)
                 }
                 .addMargin(top: 8, bottom: 24)
-                
+                        
                 Button(type: .system, title: "Sign In")
                     .corner(radius: 8)
-                    .size(height: 32)
+                    .size(height: 32, priority: .defaultHigh)
                     .font(.boldSystemFont(ofSize: 16))
-                    .align(left: 16, right: 16)
-                    .visible(bind: viewModel.$termsAccepted)
                     .enabled(source: viewModel.canLogin)
                     .tap { [unowned viewModel] in viewModel.performLogin() }
+                    .add(Animation.expanded(viewModel.$termsAccepted))
+                    .addMargin(horizontal: 16)
             }
             .alignment(Alignment.top(48).left(48).right(48))
             
@@ -112,7 +112,7 @@ class BindingsViewController: UIViewController {
         var showActivity = false
         
         var canLogin: Observable<Bool> {
-            return Observable.combineLatest($email, $password, $showActivity) { email, password, activity in
+            Observable.combineLatest($email, $password, $showActivity) { email, password, activity in
                 guard let email = email, let password = password else { return false }
                 return !email.isEmpty && !password.isEmpty && !activity
             }

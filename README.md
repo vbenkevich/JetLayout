@@ -10,6 +10,19 @@ Layout engine is based on Autolayout, so JetLayout's widgets could be easily int
 RxSwift is used to wiring UI and data.
 Since all layouts has written in code it possible to use plugins like R.swift to provide strong typed access to assets.
 
+## Requirements
+
+iOS 11, swift 5
+
+## Installation
+
+JetLayout is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'JetLayout'
+```
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
@@ -140,7 +153,7 @@ override func viewDidLoad() {
 }
 ```
 
-Support autolayout features like margins and preserving parent/safearea margins. View could be alligned both superview's bounds and superview's margins:
+View could be alligned both superview's bounds and superview's margins. View also can preserve superview margins.
 ```swift
 
 ZStack {
@@ -159,24 +172,27 @@ ZStack {
             .align(bottomPadding: false)
     }
     .distribution(.fillEqually)
-    .preserveParentPadding()
+    .padding(12) // own padding (at least 12)
+    .preserveParentPadding() // keep superview padding (result padding: horizontal = 12, vertical = 16)
 }
-.preserveParentPadding() // keep safe area and viewController margins
-.padding(10) //adding self padding (at least 10) result padding for root view in VC will: (10, 20, 10 ,20)
+.padding(vertical: 16)
+
 ```
 
-## Requirements
+Animation sample:
+```swift
+@Observed
+var termsAccepted = false
 
-iOS 11
-swift 5
-
-## Installation
-
-JetLayout is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'JetLayout'
+VStack(spacing: 8) {
+    HStack(spacing: 8) {
+        Text("I accept terms and conditions: ").numberOfLines(2)
+        Switch(self.$termsAccepted)
+    }
+            
+    Button(type: .system, title: "Sign In")
+        .add(Animation.expanded(self.$termsAccepted))
+}
 ```
 
 ## Author

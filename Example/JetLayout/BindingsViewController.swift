@@ -62,14 +62,14 @@ class BindingsViewController: UIViewController {
                 Image(#imageLiteral(resourceName: "Logo"))
                 
                 Text("Email")
-                    .addMargin(top: 8)
+                    .margin(top: 8)
                 Field(viewModel.$email)
                     .contentType(.emailAddress)
                     .placeholder("email@example.com")
                     .disabled(source: viewModel.$showActivity)
                 
                 Text("Password")
-                    .addMargin(top: 8)
+                    .margin(top: 8)
                 Field(viewModel.$password)
                     .isSecureTextEntry(true)
                     .disabled(source: viewModel.$showActivity)
@@ -81,7 +81,7 @@ class BindingsViewController: UIViewController {
                     
                     Switch(viewModel.$termsAccepted)
                 }
-                .addMargin(top: 8, bottom: 24)
+                .margin(top: 8, bottom: 24)
                         
                 Button(type: .system, title: "Sign In")
                     .corner(radius: 8)
@@ -90,7 +90,7 @@ class BindingsViewController: UIViewController {
                     .enabled(source: viewModel.canLogin)
                     .tap { [unowned viewModel] in viewModel.performLogin() }
                     .add(Animation.expanded(viewModel.$termsAccepted))
-                    .addMargin(horizontal: 16)
+                    .margin(horizontal: 16)
             }
             .alignment(Alignment.top(48).left(48).right(48))
             

@@ -114,15 +114,15 @@ public extension Widget where TView: UIView {
             alignment.topAnchor.isPaddingRelative = top
         }
         
-        if let left = topPadding {
+        if let left = leftPadding {
             alignment.leftAnchor.isPaddingRelative = left
         }
         
-        if let right = topPadding {
+        if let right = rightPadding {
             alignment.rightAnchor.isPaddingRelative = right
         }
         
-        if let bottom = topPadding {
+        if let bottom = bottomPadding {
             alignment.bottomAnchor.isPaddingRelative = bottom
         }
         

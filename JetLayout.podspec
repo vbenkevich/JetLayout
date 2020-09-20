@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'JetLayout'
-  s.version          = '0.2.0'
+  s.version          = '0.2.1'
   s.summary          = 'JetLayout is a swift based layout system.'
 
 # This description is used to generate tags and improve search results.

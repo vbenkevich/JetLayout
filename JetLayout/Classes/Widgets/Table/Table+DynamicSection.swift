@@ -25,11 +25,19 @@
 import Foundation
 import UIKit
 import RxSwift
+import RxCocoa
 
-public func TSection<Source: ObservableType>(source: Source, header: View? = nil, footer: View? = nil) -> TableBuilderItem
+public func TSection<Source: ObservableType>(source: Source, header: View? = nil, footer: View? = nil) -> TableBuilderItem & TableBuilderSectionItem
     where Source.Element: Collection
 {
     return Table.DynamicSection(header: header, items: source, footer: footer)
+}
+
+public protocol TableBuilderSectionItem {
+
+    func itemSelected(_ block: @escaping (_ item: Any, _ tableView: UITableView, _ path: IndexPath) -> Void) -> TableBuilderItem & TableBuilderSectionItem
+
+    func canSelect(_ block: @escaping (_ item: Any, _ indexPath: IndexPath) -> Bool) -> TableBuilderItem & TableBuilderSectionItem
 }
 
 extension Table {
@@ -47,16 +55,15 @@ extension Table {
                 .disposed(by: disposeBag)
         }
         
-        func attach(to tableView: UITableView, cells: [Table.CellRegistration]) {
-            self.table = tableView
-            self.cells = cells
-        }
-        
         private let disposeBag = DisposeBag()
+        private var canSelectItemAt: ((IndexPath) -> Bool) = { _ in true }
+        private var handleItemSelected: ((_ item: Any, _ tableView: UITableView, _ path: IndexPath) -> Void)?
+
         private weak var table: UITableView?
         
         let header: UIView?
-        
+        let footer: UIView?
+
         var items: [Any] = [] {
             didSet {
                 #warning("TODO Animation")
@@ -65,9 +72,13 @@ extension Table {
         }
         
         var cells: [Table.CellRegistration] = []
-        
-        let footer: UIView?
-        
+
+
+        func attach(to tableView: UITableView, cells: [Table.CellRegistration]) {
+            self.table = tableView
+            self.cells = cells
+        }
+
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
             items.count
         }
@@ -96,13 +107,12 @@ extension Table {
             estimatingSize(for: footer, in: tableView).height
         }
         
-        #warning("TODO")
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            handleItemSelected?(items[indexPath.row], tableView, indexPath)
         }
         
-        #warning("TODO")
         func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-            indexPath
+            canSelectItemAt(indexPath) ? indexPath : nil
         }
         
         private func estimatingSize(for view: UIView?, in parentView: UIView) -> CGSize {
@@ -113,8 +123,20 @@ extension Table {
             
             return view.systemLayoutSizeFitting(targetSize,
                                                 withHorizontalFittingPriority: .required,
-                                                verticalFittingPriority: .fittingSizeLevel)
+                                                verticalFittingPriority: .defaultLow)
         }
     }
 }
 
+extension Table.DynamicSection: TableBuilderSectionItem {
+
+    func itemSelected(_ block: @escaping (Any, UITableView, IndexPath) -> Void) ->  TableBuilderItem & TableBuilderSectionItem {
+        handleItemSelected = block
+        return self
+    }
+
+    func canSelect(_ block: @escaping (Any, IndexPath) -> Bool) ->  TableBuilderItem & TableBuilderSectionItem {
+        canSelectItemAt = { [unowned self] path in block(self.items[path.row], path) }
+        return self
+    }
+}

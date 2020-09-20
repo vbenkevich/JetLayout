@@ -27,32 +27,29 @@ import UIKit
 
 public extension Widget where TView: UIView {
     
+    func padding(_ offset: Offset) -> Self {
+        layoutMargins.left = offset.left
+        layoutMargins.right = offset.right
+        layoutMargins.top = offset.top
+        layoutMargins.bottom = offset.bottom
+        
+        return self
+    }
+    
+    func padding(_ offsets: Offset...) -> Self {
+        padding(offsets.reduce(.zero) { $0 + $1 })
+    }
+    
     func padding(_ padding: CGFloat) -> Self {
-        return self.padding(left: padding, top: padding, right: padding, bottom: padding)
+        return self.padding(top: padding, left: padding, bottom: padding, right: padding)
     }
     
     func padding(horizontal: CGFloat? = nil, vertical: CGFloat? = nil) -> Self {
-        return self.padding(left: horizontal, top: vertical, right: horizontal, bottom: vertical)
+        return self.padding(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
     }
     
-    func padding(left: CGFloat? = nil, top: CGFloat? = nil, right: CGFloat? = nil, bottom: CGFloat? = nil) -> Self {
-        if let left = left {
-            layoutMargins.left = left
-        }
-        
-        if let right = right {
-            layoutMargins.right = right
-        }
-        
-        if let top = top {
-            layoutMargins.top = top
-        }
-        
-        if let bottom = bottom {
-            layoutMargins.bottom = bottom
-        }
-        
-        return self
+    func padding(top: CGFloat? = nil, left: CGFloat? = nil, bottom: CGFloat? = nil, right: CGFloat? = nil) -> Self {
+        return self.padding(Offset(top: top ?? 0, left: left ?? 0, bottom: bottom ?? 0, right: right ?? 0))
     }
 
     func size(width: CGFloat? = nil, height: CGFloat? = nil, priority: UILayoutPriority = UILayoutPriority(999)) -> Self {
@@ -117,15 +114,15 @@ public extension Widget where TView: UIView {
             alignment.topAnchor.isPaddingRelative = top
         }
         
-        if let left = topPadding {
+        if let left = leftPadding {
             alignment.leftAnchor.isPaddingRelative = left
         }
         
-        if let right = topPadding {
+        if let right = rightPadding {
             alignment.rightAnchor.isPaddingRelative = right
         }
         
-        if let bottom = topPadding {
+        if let bottom = bottomPadding {
             alignment.bottomAnchor.isPaddingRelative = bottom
         }
         
@@ -183,26 +180,5 @@ public extension View {
         
         container.setNeedsLayout()
         container.layoutIfNeeded()
-    }
-}
-
-public extension View {
-    
-    func addMargin(_ padding: CGFloat) -> View {
-        addMargin(left: padding, top: padding, right: padding, bottom: padding)
-    }
-    
-    func addMargin(horizontal: CGFloat? = nil, vertical: CGFloat? = nil) -> View {
-        addMargin(left: horizontal, top: vertical, right: horizontal, bottom: vertical)
-    }
-    
-    func addMargin(left: CGFloat? = nil, top: CGFloat? = nil, right: CGFloat? = nil, bottom: CGFloat? = nil) -> View {
-        ZStack { self }.padding(left: left, top: top, right: right, bottom: bottom)
-    }
-    
-    func shift(dx: CGFloat? = nil, dy: CGFloat? = nil) -> View {
-        let dx = dx ?? 0
-        let dy = dy ?? 0
-        return addMargin(left: dx, top: dy, right: -dx, bottom: -dy)
     }
 }

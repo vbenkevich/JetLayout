@@ -46,7 +46,7 @@ class StackTests: LayoutTestCase {
                 .align(top: 4, toPadding: false)
         }
         .background(.gray)
-        .padding(left: 1, top: 2, right: 3, bottom: 4)
+        .padding(top: 2, left: 1, bottom: 4, right: 3)
         .verify(self, size: CGSize(width: 30, height: 30))
     }
     
@@ -61,7 +61,7 @@ class StackTests: LayoutTestCase {
                 .align(left: 4, toPadding: false)
         }
         .background(.gray)
-        .padding(left: 1, top: 2, right: 3, bottom: 4)
+        .padding(top: 2, left: 1, bottom: 4, right: 3)
         .verify(self, size: CGSize(width: 30, height: 30))
     }
     
@@ -77,7 +77,7 @@ class StackTests: LayoutTestCase {
                 .alignment(Alignment.right(3, toPadding: false).bottom(2))
         }
         .background(.gray)
-        .padding(left: 1, top: 2, right: 3, bottom: 4)
+        .padding(top: 2, left: 1, bottom: 4, right: 3)
         .verify(self, size: CGSize(width: 15, height: 15))
     }
     
@@ -96,7 +96,7 @@ class StackTests: LayoutTestCase {
             .alignment(Alignment.fill(toPadding: false).top(toPadding: true))
         }
         .background(.blue)
-        .padding(left: 2, top: 2, right: 2, bottom: 2)
+        .padding(top: 2, left: 2, bottom: 2, right: 2)
         .verify(self, size: CGSize(width: 15, height: 15))
     }
     

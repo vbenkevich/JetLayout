@@ -22,17 +22,24 @@
 //  SOFTWARE.
 //
 
-import UIKit
+import Foundation
 import RxSwift
-import RxCocoa
 
-public extension Widget {
-
-    func hidden<Source: ObservableType>(bind source: Source) -> Self where Source.Element == Bool {
-        bind(source, to: \.isHidden)
+public struct Animation {
+    
+    public static func expanded<Source: ObservableType>(_ source: Source,
+                                                        axis: Stack.Axis = .vertical,
+                                                        duration: TimeInterval = 0.250) -> ViewDecorator
+        where Source.Element == Bool
+    {
+        return CollpaseExpandAnimation(axis: axis, expanded: source.distinctUntilChanged(), duration: duration)
     }
-
-    func visible<Source: ObservableType>(bind source: Source) -> Self where Source.Element == Bool {
-        bind(source.invert(), to: \.isHidden)
+    
+    public static func collapsed<Source: ObservableType>(_ source: Source,
+                                                         axis: Stack.Axis = .vertical,
+                                                         duration: TimeInterval = 0.250) -> ViewDecorator
+        where Source.Element == Bool
+    {
+        return expanded(source.invert(), axis: axis, duration: duration)
     }
 }

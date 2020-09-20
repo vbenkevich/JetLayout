@@ -11,9 +11,9 @@ RxSwift is used to wiring UI and data.
 Since all layouts has written in code it possible to use plugins like R.swift to provide strong typed access to assets.
 
 ## Requirements
+#### iOS 11 
+#### Swift 5.2
 
-iOS 11
-Swift 5
 
 ## Installation
 
@@ -128,13 +128,15 @@ class ItemCell: ViewBasedTableCell<String> {
     override var view: View {
         HStack {
             Text(self.$model)
-        }.preserveParentPadding()
+        }
+        .preserveParentPadding()
     }
 }
 
 ```
 
 Wiring toogether and attaching layout to UIViewController:
+
 ```swift
 
 @Observed
@@ -149,6 +151,49 @@ override func viewDidLoad() {
         
         ItemsTable(items: self.$items)
     }
+    .root(of: self)
+}
+```
+
+View could be alligned both superview's bounds and superview's margins. View also can preserve superview margins.
+```swift
+
+ZStack {
+    // View 20x20 in the top-right corner. distance to top = 10, distance to rignt = 0
+    Empty(color: .green, size: CGSize(width: 20, height: 20))
+        .alignment(Alignment.top().right())
+        .align(topPadding: true, rightPadding: false)
+    
+    // this stack alligned to superview's bounds but preserve superview paddings
+    HStack {
+        Empty(color: .red)
+            .align(toPadding: false)
+            .align(leftPadding: true)
+        
+        Empty(color: .blue)
+            .align(bottomPadding: false)
+    }
+    .distribution(.fillEqually)
+    .padding(12) // own padding (at least 12)
+    .preserveParentPadding() // keep superview padding (result padding: horizontal = 12, vertical = 16)
+}
+.padding(vertical: 16)
+
+```
+
+Animation sample:
+```swift
+@Observed
+var termsAccepted = false
+
+VStack(spacing: 8) {
+    HStack(spacing: 8) {
+        Text("I accept terms and conditions: ").numberOfLines(2)
+        Switch(self.$termsAccepted)
+    }
+            
+    Button(type: .system, title: "Sign In")
+        .add(Animation.expanded(self.$termsAccepted))
 }
 ```
 

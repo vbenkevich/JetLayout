@@ -22,17 +22,16 @@
 //  SOFTWARE.
 //
 
-import UIKit
-import RxSwift
-import RxCocoa
+import Foundation
 
-public extension Widget {
+public protocol ViewDecorator {
+    
+    func attach(to view: View) -> View
+}
 
-    func hidden<Source: ObservableType>(bind source: Source) -> Self where Source.Element == Bool {
-        bind(source, to: \.isHidden)
-    }
-
-    func visible<Source: ObservableType>(bind source: Source) -> Self where Source.Element == Bool {
-        bind(source.invert(), to: \.isHidden)
+public extension View {
+    
+    func add(_ decorator: ViewDecorator) -> View {
+        return decorator.attach(to: self)
     }
 }

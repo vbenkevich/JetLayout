@@ -59,6 +59,8 @@ extension Table {
         private var canSelectItemAt: ((IndexPath) -> Bool) = { _ in true }
         private var handleItemSelected: ((_ item: Any, _ tableView: UITableView, _ path: IndexPath) -> Void)?
 
+        private var sizes: [IndexPath: CGFloat] = [:]
+
         private weak var table: UITableView?
         
         let header: UIView?
@@ -90,7 +92,19 @@ extension Table {
                 .first { $0.canRepresent(item) }!
                 .dequeueCell(tableView, indexPath, item)
         }
-        
+
+        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+            sizes[indexPath] = cell.frame.height
+        }
+
+        func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+            sizes[indexPath] ?? UITableView.automaticDimension
+        }
+
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            sizes[indexPath] ?? UITableView.automaticDimension
+        }
+
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             header
         }

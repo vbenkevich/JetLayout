@@ -95,6 +95,10 @@ extension Table {
         func append(to builder: TableBuilder) {
             builder.cells.append(self)
         }
+
+        func attach(to tableView: UITableView) {
+            registerCell(tableView)
+        }
     }
 }
 

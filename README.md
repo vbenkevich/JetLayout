@@ -11,8 +11,9 @@ RxSwift is used to wiring UI and data.
 Since all layouts has written in code it possible to use plugins like R.swift to provide strong typed access to assets.
 
 ## Requirements
+#### iOS 11 
+#### Swift 5.2
 
-iOS 11, swift 5
 
 ## Installation
 
@@ -134,7 +135,8 @@ class ItemCell: ViewBasedTableCell<String> {
 
 ```
 
-Wiring previuos views toogether and inserting layout to UIViewController:
+Wiring toogether and attaching layout to UIViewController:
+
 ```swift
 
 @Observed

@@ -28,9 +28,15 @@ import RxSwift
 import RxCocoa
 
 public func TSection<Source: ObservableType>(source: Source, header: View? = nil, footer: View? = nil) -> TableBuilderItem & TableBuilderSectionItem
-    where Source.Element: Collection
+    where Source.Element: Collection, Source.Element.Index == Int
 {
-    return Table.DynamicSection(header: header, items: source, footer: footer)
+    return Table.DynamicSection<Source.Element>(header: header, items: source, footer: footer)
+}
+
+public func TSection<Source: Collection>(source: Source, header: View? = nil, footer: View? = nil) -> TableBuilderItem & TableBuilderSectionItem
+    where Source.Index == Int
+{
+    return Table.DynamicSection<Source>(header: header, items: source, footer: footer)
 }
 
 public protocol TableBuilderSectionItem {
@@ -42,35 +48,39 @@ public protocol TableBuilderSectionItem {
 
 extension Table {
 
-    class DynamicSection: NSObject, TableSection {
-        
-        init<Itmes: ObservableType>(header: View? = nil, items: Itmes, footer: View? = nil) where Itmes.Element : Collection {
+    class DynamicSection<T: Collection>: NSObject, TableSection where T.Index == Int {
+        init(header: View? = nil, items: T, footer: View? = nil) {
             self.header = header?.toUIView()
             self.footer = footer?.toUIView()
-            
-            super.init()
-            
-            items.map { src in src.map { $0 } }
-                .bind { [unowned self] in self.items = $0 }
-                .disposed(by: disposeBag)
+            self.items = items
         }
-        
+
+        init<Itmes: ObservableType>(header: View? = nil, items: Itmes, footer: View? = nil) where Itmes.Element == T {
+            self.header = header?.toUIView()
+            self.footer = footer?.toUIView()
+
+            super.init()
+
+            items.bind { [unowned self] in
+                self.items = $0
+                self.table?.reloadData()
+            }
+            .disposed(by: disposeBag)
+        }
+
         private let disposeBag = DisposeBag()
         private var canSelectItemAt: ((IndexPath) -> Bool) = { _ in true }
         private var handleItemSelected: ((_ item: Any, _ tableView: UITableView, _ path: IndexPath) -> Void)?
 
+        private var sizes: [IndexPath: CGFloat] = [:]
+
         private weak var table: UITableView?
-        
+
         let header: UIView?
         let footer: UIView?
 
-        var items: [Any] = [] {
-            didSet {
-                #warning("TODO Animation")
-                table?.reloadData()
-            }
-        }
-        
+        var items: T?
+
         var cells: [Table.CellRegistration] = []
 
 
@@ -80,47 +90,59 @@ extension Table {
         }
 
         func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            items.count
+            items?.count ?? 0
         }
-        
+
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let item = items[indexPath.row]
-            
+            let item = items![indexPath.row]
+
             return cells
                 .first { $0.canRepresent(item) }!
                 .dequeueCell(tableView, indexPath, item)
         }
-        
+
+        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+            sizes[indexPath] = cell.frame.height
+        }
+
+        func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+            sizes[indexPath] ?? UITableView.automaticDimension
+        }
+
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            sizes[indexPath] ?? UITableView.automaticDimension
+        }
+
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
             header
         }
-        
+
         func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
             estimatingSize(for: header, in: tableView).height
         }
-        
+
         func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
             footer
         }
-        
+
         func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
             estimatingSize(for: footer, in: tableView).height
         }
-        
+
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            handleItemSelected?(items[indexPath.row], tableView, indexPath)
+            handleItemSelected?(items![indexPath.row], tableView, indexPath)
         }
-        
+
         func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
             canSelectItemAt(indexPath) ? indexPath : nil
         }
-        
+
         private func estimatingSize(for view: UIView?, in parentView: UIView) -> CGSize {
             guard let view = view else { return .zero }
-            
+
             let targetSize = CGSize(width: parentView.bounds.width,
                                     height: CGFloat.greatestFiniteMagnitude)
-            
+
             return view.systemLayoutSizeFitting(targetSize,
                                                 withHorizontalFittingPriority: .required,
                                                 verticalFittingPriority: .defaultLow)
@@ -136,7 +158,7 @@ extension Table.DynamicSection: TableBuilderSectionItem {
     }
 
     func canSelect(_ block: @escaping (Any, IndexPath) -> Bool) ->  TableBuilderItem & TableBuilderSectionItem {
-        canSelectItemAt = { [unowned self] path in block(self.items[path.row], path) }
+        canSelectItemAt = { [unowned self] path in block(self.items![path.row], path) }
         return self
     }
 }

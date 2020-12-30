@@ -27,41 +27,41 @@ import UIKit
 
 public protocol GenericCell {
     associatedtype Model
-    
+
     var model: Model? { get set }
 }
 
 public extension GenericCell where Self: UITableViewCell {
-    
+
     static func register() -> TableBuilderItem {
         Table.CellRegistration(model: Model.self, cell: self)
     }
 }
 
 open class ViewBasedTableCell<Model>: UITableViewCell, GenericCell {
-    
+
     @Observed
     public var model: Model?
-    
+
     open var view: View {
         fatalError("Abstract")
     }
-    
+
     public override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
     }
-    
+
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
         setupLayout()
     }
-    
+
     private func setupLayout() {
         preservesSuperviewLayoutMargins = true
         contentView.preservesSuperviewLayoutMargins = true
         backgroundColor = .clear
-        
+
         view.embed(in: contentView, alignment: .fill(toPadding: false))
     }
 }
@@ -69,29 +69,29 @@ open class ViewBasedTableCell<Model>: UITableViewCell, GenericCell {
 extension Table {
 
     class CellRegistration: TableBuilderItem {
-        
+
         init<Model, Cell: UITableViewCell & GenericCell>(model: Model.Type, cell: Cell.Type) where Cell.Model == Model {
             canRepresent = { model in
-                type(of: model) == Model.self
+                model as? Model != nil
             }
-            
+
             dequeueCell = { table, index, model in
                 var cell = table.dequeueReusableCell(withIdentifier: Cell.identifier, for: index) as! Cell
                 cell.model = model as? Model
                 return cell
             }
-            
+
             registerCell = { table in
                 table.register(Cell.self, forCellReuseIdentifier: Cell.identifier)
             }
         }
-        
+
         let registerCell: (UITableView) -> Void
-        
+
         let canRepresent: (Any) -> Bool
-        
+
         let dequeueCell: (UITableView, IndexPath, Any) -> UITableViewCell
-        
+
         func append(to builder: TableBuilder) {
             builder.cells.append(self)
         }
@@ -103,7 +103,7 @@ extension Table {
 }
 
 extension UITableViewCell {
-    
+
     static var identifier: String {
         String(describing: self)
     }

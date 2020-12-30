@@ -26,7 +26,7 @@ import UIKit
 import RxSwift
 
 public extension Table {
-    
+
     convenience init(_ tableView: UITableView? = nil, @TableBuilder builderBlock: @escaping () -> TableBuilderItem) {
         self.init(tableView ?? UITableView())
         let source = Table.SectionsSource(table: view)
@@ -49,25 +49,23 @@ public extension Table {
     }
 }
 
-#warning("TODO dynamic sections count")
 @_functionBuilder
 public class TableBuilder {
-    
-    init() {
-    }
-    
+
+    init() { }
+
     convenience init(_ item: TableBuilderItem) {
         self.init()
         item.append(to: self)
     }
-    
+
     var sections: [Observable<[TableSection]>] = []
     var cells: [Table.CellRegistration] = []
     var allItems: [TableBuilderItem] = []
-    
+
     public static func buildBlock(_ elements: TableBuilderItem...) -> TableBuilderItem {
         let builder = TableBuilder()
-        
+
         for element in elements {
             element.append(to: builder)
             builder.allItems.append(element)
@@ -75,26 +73,26 @@ public class TableBuilder {
 
         return builder
     }
-    
+
     public static func buildIf(_ elements: TableBuilderItem?) -> TableBuilderItem {
         return elements ?? TableBuilder()
     }
-    
+
     public static func buildEither(first: TableBuilderItem) -> TableBuilderItem {
         return first
     }
-    
+
     public static func buildEither(second: TableBuilderItem) -> TableBuilderItem {
         return second
     }
 }
 
 public protocol TableBuilderItem {
-    
+
     func append(to builder: TableBuilder)
 
     func attach(to tableView: UITableView)
-    
+
     func asBuilder() -> TableBuilder
 }
 
@@ -110,11 +108,11 @@ public extension TableBuilderItem {
 }
 
 extension TableBuilder: TableBuilderItem {
-    
+
     public func asBuilder() -> TableBuilder {
         self
     }
-    
+
     public func append(to builder: TableBuilder) {
         builder.sections.append(contentsOf: sections)
         builder.allItems.append(contentsOf: allItems)
@@ -122,14 +120,14 @@ extension TableBuilder: TableBuilderItem {
 }
 
 extension Table.StaticSection: TableBuilderItem {
-   
+
     public func append(to builder: TableBuilder) {
         builder.sections.append(.just([self]))
     }
 }
 
 extension Table.DynamicSection: TableBuilderItem {
-   
+
     public func append(to builder: TableBuilder) {
         builder.sections.append(.just([self]))
     }

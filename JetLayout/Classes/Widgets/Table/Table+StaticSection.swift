@@ -76,8 +76,6 @@ extension Table {
             self.footer = footer?.toUIView()
         }
 
-        private var sizes: [IndexPath: CGFloat] = [:]
-
         let header: UIView?
 
         let cells: [TableCell]
@@ -93,18 +91,6 @@ extension Table {
 
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             cells[indexPath.row]
-        }
-
-        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-            sizes[indexPath] = cell.frame.height
-        }
-
-        func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-            sizes[indexPath] ?? UITableView.automaticDimension
-        }
-
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            sizes[indexPath] ?? UITableView.automaticDimension
         }
 
         func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

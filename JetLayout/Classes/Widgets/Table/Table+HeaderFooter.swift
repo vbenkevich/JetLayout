@@ -48,6 +48,6 @@ public struct TableFooter: TableBuilderItem {
     public func attach(to tableView: UITableView) {
         let footer = view.toUIView()
         footer.frame.size = footer.systemLayoutSizeFitting(CGSize(width: tableView.bounds.width, height: .greatestFiniteMagnitude))
-        tableView.tableHeaderView = footer
+        tableView.tableFooterView = footer
     }
 }

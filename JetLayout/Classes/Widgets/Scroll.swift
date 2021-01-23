@@ -99,7 +99,11 @@ open class Scroll: Widget<UIScrollView> {
 }
 
 public extension Scroll {
-    
+
+    convenience init(axis: Axis = .vertical, @Builder content: @escaping Content) {
+        self.init(nil, axis, content: content)
+    }
+
     func axis(_ axis: Axis) -> Self {
         self.axis = axis
         return self
@@ -137,6 +141,11 @@ public extension Scroll {
     
     func indicatorStyle(_ style: UIScrollView.IndicatorStyle) -> Self {
         view.indicatorStyle = style
+        return self
+    }
+
+    func keyboardDismissMode(_ mode: UIScrollView.KeyboardDismissMode) -> Self {
+        view.keyboardDismissMode = mode
         return self
     }
 }

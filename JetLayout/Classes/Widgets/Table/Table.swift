@@ -54,4 +54,29 @@ public extension Widget where TView: UITableView {
         view.delegate = delegate
         return self
     }
+
+    func separator(style: UITableViewCell.SeparatorStyle? = nil, insets: UIEdgeInsets? = nil, color: UIColor? = nil) -> Self {
+        if let style = style {
+            view.separatorStyle = style
+        }
+        if let insets = insets {
+            view.separatorInset = insets
+        }
+        if let color = color {
+            view.separatorColor = color
+        }
+        return self
+    }
+
+    func selection(allow: Bool, multiple: Bool = false) -> Self {
+        view.allowsSelection = allow
+        view.allowsMultipleSelection = multiple
+        return self
+    }
+
+    func selectionDuringEditing(allow: Bool, multiple: Bool = false) -> Self {
+        view.allowsSelectionDuringEditing = allow
+        view.allowsMultipleSelectionDuringEditing = multiple
+        return self
+    }
 }

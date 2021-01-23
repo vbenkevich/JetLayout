@@ -60,6 +60,8 @@ extension Table {
                 .disposed(by: table.disposeBag)
         }
 
+        weak var editingDelegate: TableEditingDelegate?
+
         @Observed
         var sections: [TableSection] = []
 

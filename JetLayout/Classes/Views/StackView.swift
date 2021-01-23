@@ -52,7 +52,15 @@ public class StackView: UIView {
         
         allArrangedViews.append(arranged)
     }
-    
+
+    public func clearArrangedSubviews() {
+        allArrangedViews.forEach {
+            $0.view.removeFromSuperview()
+        }
+
+        allArrangedViews = []
+    }
+
     public override func updateConstraints() {
         super.updateConstraints()
         
